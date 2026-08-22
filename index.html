@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Подарок для Саиды 🎁</title>
+
+<style>
+* {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html, body {
+  margin: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  font-family: Arial, sans-serif;
+  background:
+    radial-gradient(circle at 50% 20%, #8b155f, #36002f 45%, #100010);
+  color: white;
+}
+
+.screen {
+  display: none;
+  width: 100%;
+  height: 100%;
+  min-height: 100dvh;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  position: relative;
+  padding: 20px;
+}
+
+.screen.active {
+  display: flex;
+}
+
+.title {
+  position: absolute;
+  top: 8%;
+  text-align: center;
+  font-size: clamp(28px, 8vw, 44px);
+  font-weight: 900;
+  text-shadow: 0 0 25px #ff4d9d;
+}
+
+.subtitle {
+  position: absolute;
+  top: 18%;
+  text-align: center;
+  color: #ffd9eb;
+  font-size: 16px;
+}
+
+.envelope {
+  width: min(82vw, 350px);
+  height: 250px;
+  position: relative;
+  margin-top: 40px;
+  cursor: pointer;
+  animation: float 2.5s ease-in-out infinite;
+  filter: drop-shadow(0 20px 35px #0009);
+}
+
+@keyframes float {
+  50% {
+    transform: translateY(-12px) rotate(1deg);
+  }
+}
+
+.env-body {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(145deg, #ff65a5, #ff176b);
+  border-radius: 20px;
+  box-shadow:
+    0 0 0 3px #ffb0d0,
+    0 0 50px #ff267d88;
+  overflow: hidden;
+}
+
+.env-body::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: #ffffff22;
+  clip-path: polygon(0 0, 50% 55%, 100% 0, 100% 100%, 0 100%);
+}
+
+.flap {
+  position: absolute;
+  z-index: 3;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 65%;
+  background: linear-gradient(155deg, #ff82b6, #ff287c);
+  clip-path: polygon(0 0, 100% 0, 50% 100%);
+  transform-origin: top center;
+  transition: transform .7s ease;
+}
+
+.seal {
+  position: absolute;
+  z-index: 5;
+  left: 50%;
+  top: 52%;
+  transform: translate(-50%, -50%);
+  width: 76px;
+  height: 76px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #ffe28a, #ffae00 45%, #ff3d83 48%);
+  display: grid;
+  place-items: center;
+  font-size: 32px;
+  box-shadow: 0 0 0 5px #ffffff44, 0 0 30px #ffd166;
+  transition: .5s;
+}
+
+.envelope.open .flap {
+  transform: rotateX(180deg);
+}
+
+.envelope.open .seal {
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(2);
+}
+
+.tap {
+  position: absolute;
+  bottom: 11%;
+  font-weight: bold;
+  font-size: 17px;
+  animation: pulse 1.4s infinite;
+}
+
+@keyframes pulse {
+  50% {
+    transform: scale(1.08);
+    text-shadow: 0 0 20px #ff5ba5;
+  }
+}
+
+/* ФОТО */
+
+.photo-card {
+  width: min(86vw, 390px);
+  aspect-ratio: 4 / 5;
+  perspective: 1200px;
+  cursor: pointer;
+}
+
+.card-inner {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform .85s ease;
+}
+
+.photo-card.flipped .card-inner {
+  transform: rotateY(180deg);
+}
+
+.card-front,
+.card-back {
+  position: absolute;
+  inset: 0;
+  border-radius: 25px;
+  overflow: hidden;
+  backface-visibility: hidden;
+  box-shadow: 0 25px 70px #000b, 0 0 0 3px #ffb0d055;
+}
+
+.card-front img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.card-front::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(transparent 60%, #000a);
+}
+
+.name {
+  position: absolute;
+  z-index: 3;
+  bottom: 18px;
+  left: 18px;
+  background: #ff2477dd;
+  padding: 10px 16px;
+  border-radius: 30px;
+  font-weight: bold;
+  font-size: 19px;
+}
+
+.card-back {
+  transform: rotateY(180deg);
+  background:
+    radial-gradient(circle at 30% 20%, #ff80b4, transparent 35%),
+    linear-gradient(145deg, #ff267c, #7021d9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.message {
+  font-size: clamp(32px, 9vw, 48px);
+  font-weight: 1000;
+  line-height: 1.05;
+  text-shadow: 0 7px 30px #0008;
+}
+
+.message small {
+  display: block;
+  margin-top: 22px;
+  font-size: 19px;
+  color: #fff4fa;
+}
+
+/* СЕРТИФИКАТ */
+
+.certificate {
+  width: min(94vw, 550px);
+  max-height: 72vh;
+  object-fit: contain;
+  border-radius: 15px;
+  box-shadow: 0 25px 80px #000d, 0 0 0 3px #ffd166;
+  animation: appear .8s ease;
+}
+
+@keyframes appear {
+  from {
+    opacity: 0;
+    transform: scale(.7) rotate(-4deg);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) rotate(0);
+  }
+}
+
+.final-title {
+  position: absolute;
+  top: 6%;
+  text-align: center;
+  font-size: clamp(28px, 8vw, 44px);
+  font-weight: 1000;
+  text-shadow: 0 0 30px #ff3f88;
+}
+
+.final-text {
+  position: absolute;
+  bottom: 5%;
+  text-align: center;
+  color: #ffe1ef;
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+/* КОНФЕТТИ */
+
+.confetti {
+  position: fixed;
+  top: -20px;
+  width: 9px;
+  height: 15px;
+  z-index: 100;
+  pointer-events: none;
+  animation: fall linear forwards;
+}
+
+@keyframes fall {
+  to {
+    transform:
+      translate3d(var(--x), 110vh, 0)
+      rotate(720deg);
+    opacity: 0;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<!-- ЭКРАН 1 -->
+
+<section id="welcome" class="screen active">
+
+  <div class="title">
+    🎁 Для Саиды 💖
+  </div>
+
+  <div class="subtitle">
+    Тут для тебя кое-что очень особенное…
+  </div>
+
+  <div class="envelope" id="envelope">
+
+    <div class="env-body"></div>
+
+    <div class="flap"></div>
+
+    <div class="seal">
+      💖
+    </div>
+
+  </div>
+
+  <div class="tap">
+    Нажми на конверт ✨
+  </div>
+
+</section>
+
+
+<!-- ЭКРАН 2 -->
+
+<section id="photoScreen" class="screen">
+
+  <div class="title">
+    А теперь… 👀
+  </div>
+
+  <div class="photo-card" id="photoCard">
+
+    <div class="card-inner">
+
+      <div class="card-front">
+
+        <img src="saida.jpg">
+
+        <div class="name">
+          Саида ❤️
+        </div>
+
+      </div>
+
+      <div class="card-back">
+
+        <div class="message">
+
+          С ДРШКОЙ! 🥳💖
+
+          <small>
+            От Мариям и Исмы
+          </small>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- ЭКРАН 3 -->
+
+<section id="certificateScreen" class="screen">
+
+  <div class="final-title">
+    ТВОЙ ПОДАРОК! 🎉🎁
+  </div>
+
+  <img
+    class="certificate"
+    src="certificate.jpg"
+  >
+
+  <div class="final-text">
+    С днём рождения, Саида! ❤️<br>
+    Пусть этот подарок принесёт море радости!
+  </div>
+
+</section>
+
+
+<!-- МУЗЫКА -->
+
+<audio id="music" preload="auto"
+src="https://mp3tourl.com/audio/1787416653290-dffa8b05-e576-4ede-9bcc-f8fb0a323403.mp3">
+</audio>
+
+
+<script>
+
+const envelope = document.getElementById("envelope");
+const photoCard = document.getElementById("photoCard");
+const music = document.getElementById("music");
+
+const welcome = document.getElementById("welcome");
+const photoScreen = document.getElementById("photoScreen");
+const certificateScreen =
+  document.getElementById("certificateScreen");
+
+
+function show(screen) {
+
+  welcome.classList.remove("active");
+  photoScreen.classList.remove("active");
+  certificateScreen.classList.remove("active");
+
+  screen.classList.add("active");
+
+}
+
+
+/* КОНФЕТТИ */
+
+function confetti(amount = 180) {
+
+  const colors = [
+    "#ff3f88",
+    "#ffd166",
+    "#7b2cff",
+    "#35e6ff",
+    "#7cff6b",
+    "#ffffff"
+  ];
+
+  for (let i = 0; i < amount; i++) {
+
+    const piece = document.createElement("div");
+
+    piece.className = "confetti";
+
+    piece.style.left =
+      Math.random() * 100 + "vw";
+
+    piece.style.background =
+      colors[Math.floor(Math.random() * colors.length)];
+
+    piece.style.setProperty(
+      "--x",
+      (Math.random() * 240 - 120) + "px"
+    );
+
+    piece.style.animationDuration =
+      (2 + Math.random() * 2.5) + "s";
+
+    document.body.appendChild(piece);
+
+    setTimeout(() => {
+      piece.remove();
+    }, 5000);
+
+  }
+
+}
+
+
+/* КОНВЕРТ */
+
+envelope.addEventListener("click", () => {
+
+  if (envelope.classList.contains("open"))
+    return;
+
+  envelope.classList.add("open");
+
+  music.play().catch(() => {});
+
+  confetti(220);
+
+  setTimeout(() => {
+
+    show(photoScreen);
+
+  }, 1100);
+
+});
+
+
+/* ФОТО */
+
+photoCard.addEventListener("click", () => {
+
+  if (!photoCard.classList.contains("flipped")) {
+
+    photoCard.classList.add("flipped");
+
+    confetti(120);
+
+  } else {
+
+    confetti(250);
+
+    setTimeout(() => {
+      show(certificateScreen);
+
+    }, 350);
+
+  }
+
+});
+
+</script>
+
+</body>
+</html>
